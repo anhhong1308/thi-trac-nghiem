@@ -1,8 +1,8 @@
-```php
 <?php
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Teacher\QuestionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,9 +49,15 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
     ->prefix('teacher')
     ->name('teacher.')
     ->group(function () {
+
+        // Dashboard Giảng viên
         Route::get('/', function () {
             return Inertia::render('Teacher/Dashboard');
         })->name('dashboard');
+
+        // Ngân hàng câu hỏi
+        Route::resource('questions', QuestionController::class)
+            ->except(['show']);
     });
 
 // Khu vực Sinh viên
