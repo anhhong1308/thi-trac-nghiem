@@ -1,13 +1,18 @@
+
 <?php
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Teacher\QuestionController;
+use App\Http\Controllers\Teacher\QuestionImportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Trang chủ
+// ==========================================
+// TRANG CHỦ
+// ==========================================
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -17,7 +22,9 @@ Route::get('/', function () {
     ]);
 });
 
-// Điều hướng người dùng theo vai trò
+// ==========================================
+// ĐIỀU HƯỚNG NGƯỜI DÙNG THEO VAI TRÒ
+// ==========================================
 Route::get('/dashboard', function () {
     $role = auth()->user()->role;
 
@@ -28,7 +35,9 @@ Route::get('/dashboard', function () {
     };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Khu vực Admin
+// ==========================================
+// KHU VỰC ADMIN
+// ==========================================
 Route::middleware(['auth', 'verified', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -42,9 +51,15 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         // Quản lý tài khoản
         Route::resource('users', UserController::class)
             ->except(['create', 'edit', 'show']);
+
+        // Quản lý môn học
+        Route::resource('subjects', SubjectController::class)
+            ->except(['create', 'edit', 'show']);
     });
 
-// Khu vực Giảng viên
+// ==========================================
+// KHU VỰC GIẢNG VIÊN
+// ==========================================
 Route::middleware(['auth', 'verified', 'role:teacher'])
     ->prefix('teacher')
     ->name('teacher.')
@@ -55,23 +70,54 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
             return Inertia::render('Teacher/Dashboard');
         })->name('dashboard');
 
-        // Ngân hàng câu hỏi
+        // Import câu hỏi từ Excel
+        Route::get(
+            '/questions/import',
+            [QuestionImportController::class, 'index']
+        )->name('questions.import');
+
+        // Tải file Excel mẫu
+        Route::get(
+            '/questions/import/template',
+            [QuestionImportController::class, 'downloadTemplate']
+        )->name('questions.import.template');
+
+        // Tải file Excel lên và xem trước
+        Route::post(
+            '/questions/import/preview',
+            [QuestionImportController::class, 'preview']
+        )->name('questions.import.preview');
+
+        // Xác nhận nhập câu hỏi
+        Route::post(
+            '/questions/import/confirm',
+            [QuestionImportController::class, 'confirm']
+        )->name('questions.import.confirm');
+
+        // Ngân hàng câu hỏi: thêm, sửa, xóa, danh sách
         Route::resource('questions', QuestionController::class)
             ->except(['show']);
     });
 
-// Khu vực Sinh viên
+// ==========================================
+// KHU VỰC SINH VIÊN
+// ==========================================
 Route::middleware(['auth', 'verified', 'role:student'])
     ->prefix('student')
     ->name('student.')
     ->group(function () {
+
+        // Dashboard Sinh viên
         Route::get('/', function () {
             return Inertia::render('Student/Dashboard');
         })->name('dashboard');
     });
 
-// Quản lý hồ sơ cá nhân
+// ==========================================
+// QUẢN LÝ HỒ SƠ CÁ NHÂN
+// ==========================================
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -82,4 +128,7 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy');
 });
 
+// ==========================================
+// AUTHENTICATION
+// ==========================================
 require __DIR__.'/auth.php';

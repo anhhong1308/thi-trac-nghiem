@@ -1,4 +1,4 @@
-```vue
+
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 
@@ -23,24 +23,35 @@ const questionType = (type) => {
     <div class="min-h-screen bg-gray-100 p-6">
         <div class="mx-auto max-w-7xl">
 
-            <!-- Tiêu đề và nút thêm câu hỏi -->
-            <div class="mb-6 flex items-center justify-between">
+            <!-- Tiêu đề và các nút chức năng -->
+            <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">
                         Ngân hàng câu hỏi
                     </h1>
+
                     <p class="mt-1 text-sm text-gray-500">
                         Quản lý và phân loại câu hỏi trắc nghiệm
                     </p>
                 </div>
 
-                <!-- Tạm dùng thẻ a để kiểm tra lỗi điều hướng Inertia -->
-                <a
-                    :href="route('teacher.questions.create')"
-                    class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                >
-                    + Thêm câu hỏi
-                </a>
+                <div class="flex flex-wrap gap-3">
+                    <!-- Nút Import Excel -->
+                    <Link
+                        :href="route('teacher.questions.import')"
+                        class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+                    >
+                        ↑ Import Excel
+                    </Link>
+
+                    <!-- Nút thêm câu hỏi -->
+                    <Link
+                        :href="route('teacher.questions.create')"
+                        class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                    >
+                        + Thêm câu hỏi
+                    </Link>
+                </div>
             </div>
 
             <!-- Bảng danh sách câu hỏi -->
@@ -119,12 +130,12 @@ const questionType = (type) => {
                 </div>
 
                 <!-- Phân trang -->
-                <div class="flex items-center justify-between border-t px-5 py-4">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-t px-5 py-4">
                     <span class="text-sm text-gray-500">
                         Tổng số: {{ questions.total }} câu hỏi
                     </span>
 
-                    <div class="flex gap-2">
+                    <div class="flex flex-wrap gap-2">
                         <Link
                             v-for="link in questions.links"
                             :key="link.label"
