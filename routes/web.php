@@ -1,6 +1,6 @@
 
 <?php
-
+use App\Http\Controllers\Teacher\ChapterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -69,6 +69,9 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
         Route::get('/', function () {
             return Inertia::render('Teacher/Dashboard');
         })->name('dashboard');
+        // Quản lý chương
+        Route::resource('chapters', ChapterController::class)
+             ->except(['create', 'edit', 'show']);
 
         // Import câu hỏi từ Excel
         Route::get(
