@@ -35,6 +35,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
+            'account_status' => 'approved',
         ]);
 
         return redirect()->route('admin.users.index')
@@ -61,10 +62,39 @@ class UserController extends Controller
             ->with('success', 'Cập nhật tài khoản thành công!');
     }
 
+    // Duyệt tài khoản giảng viên
+    public function approveTeacher(User $user)
+    {
+        abort_unless(
+            $user->role === 'teacher' && $user->account_status === 'pending',
+            404
+        );
+
+        $user->update([
+            'account_status' => 'approved',
+        ]);
+
+        return back()->with('success', 'Đã duyệt tài khoản giảng viên thành công!');
+    }
+
+    // Từ chối tài khoản giảng viên
+    public function rejectTeacher(User $user)
+    {
+        abort_unless(
+            $user->role === 'teacher' && $user->account_status === 'pending',
+            404
+        );
+
+        $user->update([
+            'account_status' => 'rejected',
+        ]);
+
+        return back()->with('success', 'Đã từ chối tài khoản giảng viên!');
+    }
+
     // Xóa tài khoản
     public function destroy(User $user)
     {
-        // Không cho phép Admin tự xóa tài khoản đang đăng nhập
         if ($user->id === auth()->id()) {
             return back()->with('error', 'Bạn không thể xóa tài khoản đang đăng nhập!');
         }

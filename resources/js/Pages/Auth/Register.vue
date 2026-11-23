@@ -1,3 +1,4 @@
+
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
@@ -9,6 +10,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 const form = useForm({
     name: '',
     email: '',
+    role: 'student',
     password: '',
     password_confirmation: '',
 });
@@ -22,11 +24,11 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="Đăng ký tài khoản" />
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Họ và tên" />
 
                 <TextInput
                     id="name"
@@ -42,7 +44,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Địa chỉ email" />
 
                 <TextInput
                     id="email"
@@ -57,7 +59,31 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="role" value="Bạn đăng ký với vai trò" />
+
+                <select
+                    id="role"
+                    v-model="form.role"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    required
+                >
+                    <option value="student">Sinh viên</option>
+                    <option value="teacher">Giảng viên</option>
+                </select>
+
+                <InputError class="mt-2" :message="form.errors.role" />
+
+                <p v-if="form.role === 'teacher'" class="mt-2 text-sm text-amber-600">
+                    Tài khoản giảng viên cần được Admin xác nhận trước khi sử dụng chức năng giảng viên.
+                </p>
+
+                <p v-else class="mt-2 text-sm text-gray-600">
+                    Tài khoản sinh viên được kích hoạt ngay sau khi đăng ký.
+                </p>
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="password" value="Mật khẩu" />
 
                 <TextInput
                     id="password"
@@ -74,7 +100,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Xác nhận mật khẩu"
                 />
 
                 <TextInput
@@ -97,7 +123,7 @@ const submit = () => {
                     :href="route('login')"
                     class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                    Already registered?
+                    Đã có tài khoản?
                 </Link>
 
                 <PrimaryButton
@@ -105,7 +131,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    Đăng ký
                 </PrimaryButton>
             </div>
         </form>

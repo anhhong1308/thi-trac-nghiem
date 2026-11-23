@@ -1,59 +1,173 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DEV NOTES – THI TRẮC NGHIỆM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Sổ tay ghi nhớ khi phát triển, chạy thử và kiểm tra hệ thống.
+> Cập nhật sau mỗi lần hoàn thành một chức năng.
 
-## About Laravel
+## 1. Thông tin môi trường
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Project: `D:\ĐACN\thi-trac-nghiem`
+- Laravel: `12.70.2`
+- PHP: `8.5.12`
+- Composer: `2.10.3`
+- Node.js: `24.21.0`
+- Git: `2.55.0.windows.5`
+- Database: `thi_trac_nghiem`
+- DB Host: `127.0.0.1`
+- DB Port: `3306`
+- GitHub: https://github.com/anhhong1308/thi-trac-nghiem
+- Branch: `master`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 2. Cách chạy project
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Trước khi chạy
+1. Mở XAMPP.
+2. Khởi động MySQL.
+3. Kiểm tra database `thi_trac_nghiem`.
+4. Mở PowerShell tại thư mục project.
 
-## Learning Laravel
+### Chạy Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```powershell
+php artisan serve
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Chạy Vite
 
-## Laravel Sponsors
+Mở terminal thứ hai:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```powershell
+npm.cmd run dev
+```
 
-### Premium Partners
+### Build frontend
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```powershell
+npm.cmd run build
+```
 
-## Contributing
+### Kiểm tra route
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```powershell
+php artisan route:list
+```
 
-## Code of Conduct
+### Kiểm tra cú pháp PHP
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```powershell
+php -l đường/dẫn/file.php
+```
 
-## Security Vulnerabilities
+## 3. Quy tắc quan trọng khi phát triển
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Luôn kiểm tra file hiện tại trước khi sửa.
+- Không tự ý thay toàn bộ file nếu chưa xem nội dung cũ.
+- Khi sửa code, kiểm tra cú pháp PHP hoặc build frontend.
+- Sau khi sửa chức năng, phải kiểm tra trực tiếp trên website.
+- Không chạy `php artisan migrate:fresh` trên database đang sử dụng.
+- Không xóa migration cũ đã chạy.
+- Nếu cần thay đổi database, tạo migration mới.
+- Trước khi sửa nhiều file, kiểm tra `git status`.
+- Commit Git sau khi hoàn thành một chức năng ổn định.
+- Không sửa nhiều chức năng cùng lúc khi chưa kiểm tra chức năng trước.
+- Không giả định chức năng hoạt động chỉ vì build thành công.
+- Không lưu mật khẩu tài khoản thử nghiệm trong README hoặc GitHub.
+- Không đưa file `.env` lên GitHub.
 
-## License
+## 4. Quy tắc nghiệp vụ đã thống nhất
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Vai trò
+
+- `admin`: Quản trị viên.
+- `teacher`: Giảng viên.
+- `student`: Sinh viên.
+
+Không cho phép người dùng tự đăng ký Admin.
+
+### Trạng thái tài khoản
+
+- `pending`: Chờ duyệt.
+- `approved`: Đã duyệt.
+- `rejected`: Bị từ chối.
+
+### Đăng ký tài khoản
+
+- Sinh viên đăng ký: tự động `approved`.
+- Giảng viên đăng ký: tự động `pending`.
+- Giảng viên pending được đăng nhập nhưng không được sử dụng chức năng giảng viên.
+- Admin chính duyệt tài khoản giảng viên.
+- Tài khoản Admin hiện tại không bị ảnh hưởng.
+
+### Quan hệ chuyên ngành và môn học
+
+- Một chuyên ngành có nhiều môn học.
+- Một môn học có thể thuộc nhiều chuyên ngành.
+- Một giảng viên có thể đăng ký nhiều chuyên ngành.
+- Một giảng viên có thể đăng ký nhiều môn học.
+- Một môn học có thể được nhiều giảng viên phụ trách.
+- Admin duyệt đăng ký chuyên ngành và môn học.
+- Giảng viên chỉ quản lý dữ liệu thuộc môn học được duyệt.
+
+## 5. Các lỗi và kinh nghiệm cần nhớ
+
+### Laravel và PHP
+
+- Nếu Laravel báo lỗi class hoặc route, kiểm tra `route:list`.
+- Nếu PHP báo lỗi cú pháp, dùng `php -l`.
+- Nếu sửa route hoặc cấu hình mà hệ thống chưa nhận, kiểm tra cache trước khi xử lý tiếp.
+
+### Vue và Vite
+
+- Nếu trang Vue trắng, kiểm tra Console trình duyệt.
+- Kiểm tra tên file và đường dẫn Inertia render có khớp không.
+- Sau khi sửa Vue, chạy `npm.cmd run build`.
+- Không cần chạy Vite build để sử dụng mỗi lần nếu đang chạy `npm.cmd run dev`.
+
+### Database
+
+- Kiểm tra tên cột và khóa ngoại trước khi viết Controller.
+- Không tự ý đổi tên bảng hoặc cột đã được sử dụng.
+- Trước khi sửa quan hệ Model, kiểm tra cả hai phía của quan hệ.
+- Không xóa dữ liệu thật để thử nghiệm.
+
+### Git
+
+Kiểm tra thay đổi:
+
+```powershell
+git status
+```
+
+Xem lịch sử:
+
+```powershell
+git log --oneline -10
+```
+
+Commit:
+
+```powershell
+git add .
+git commit -m "Mo ta thay doi"
+```
+
+Push:
+
+```powershell
+git push origin master
+```
+
+## 6. Kiểm thử chức năng
+
+Mỗi chức năng sau khi làm cần kiểm tra:
+
+- [ ] Giao diện hiển thị đúng.
+- [ ] Dữ liệu được lưu đúng database.
+- [ ] Dữ liệu sửa được cập nhật chính xác.
+- [ ] Xóa dữ liệu đúng đối tượng.
+- [ ] Người không đủ quyền không truy cập được.
+- [ ] Dữ liệu đầu vào không hợp lệ được báo lỗi.
+- [ ] Không làm hỏng các chức năng đã có.
+- [ ] Kiểm tra lại sau khi đăng xuất và đăng nhập.
+
+Không đánh dấu hoàn thành chỉ vì không có lỗi cú pháp hoặc build thành công.
+

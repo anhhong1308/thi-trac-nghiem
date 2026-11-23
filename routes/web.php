@@ -1,9 +1,11 @@
 
 <?php
+
 use App\Http\Controllers\Teacher\ChapterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\QuestionImportController;
 use Illuminate\Foundation\Application;
@@ -26,14 +28,31 @@ Route::get('/', function () {
 // ĐIỀU HƯỚNG NGƯỜI DÙNG THEO VAI TRÒ
 // ==========================================
 Route::get('/dashboard', function () {
-    $role = auth()->user()->role;
+    $user = auth()->user();
 
-    return match ($role) {
+    return match ($user->role) {
         'admin' => redirect()->route('admin.dashboard'),
-        'teacher' => redirect()->route('teacher.dashboard'),
+
+        'teacher' => $user->account_status === 'approved'
+            ? redirect()->route('teacher.dashboard')
+            : redirect()->route('teacher.account-status'),
+
         default => redirect()->route('student.dashboard'),
     };
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// ==========================================
+// TRANG TRẠNG THÁI TÀI KHOẢN GIẢNG VIÊN
+// ==========================================
+Route::get('/teacher/account-status', function () {
+    $user = auth()->user();
+
+    abort_unless($user->role === 'teacher', 403);
+
+    return Inertia::render('Teacher/AccountStatus', [
+        'accountStatus' => $user->account_status,
+    ]);
+})->middleware(['auth', 'verified'])->name('teacher.account-status');
 
 // ==========================================
 // KHU VỰC ADMIN
@@ -52,8 +71,24 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::resource('users', UserController::class)
             ->except(['create', 'edit', 'show']);
 
+        // Duyệt tài khoản giảng viên
+        Route::patch(
+            'users/{user}/approve',
+            [UserController::class, 'approveTeacher']
+        )->name('users.approve');
+
+        // Từ chối tài khoản giảng viên
+        Route::patch(
+            'users/{user}/reject',
+            [UserController::class, 'rejectTeacher']
+        )->name('users.reject');
+
         // Quản lý môn học
         Route::resource('subjects', SubjectController::class)
+            ->except(['create', 'edit', 'show']);
+
+        // Quản lý chuyên ngành
+        Route::resource('majors', MajorController::class)
             ->except(['create', 'edit', 'show']);
     });
 
@@ -69,9 +104,10 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
         Route::get('/', function () {
             return Inertia::render('Teacher/Dashboard');
         })->name('dashboard');
+
         // Quản lý chương
         Route::resource('chapters', ChapterController::class)
-             ->except(['create', 'edit', 'show']);
+            ->except(['create', 'edit', 'show']);
 
         // Import câu hỏi từ Excel
         Route::get(
@@ -97,7 +133,7 @@ Route::middleware(['auth', 'verified', 'role:teacher'])
             [QuestionImportController::class, 'confirm']
         )->name('questions.import.confirm');
 
-        // Ngân hàng câu hỏi: thêm, sửa, xóa, danh sách
+        // Ngân hàng câu hỏi
         Route::resource('questions', QuestionController::class)
             ->except(['show']);
     });

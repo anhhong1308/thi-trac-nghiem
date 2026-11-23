@@ -10,8 +10,19 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (!$request->user() || !in_array($request->user()->role, $roles, true)) {
+        $user = $request->user();
+
+        // Chưa đăng nhập hoặc không đúng vai trò
+        if (!$user || !in_array($user->role, $roles, true)) {
             abort(403);
+        }
+
+        // Giảng viên phải được Admin duyệt tài khoản
+        if (
+            $user->role === 'teacher'
+            && $user->account_status !== 'approved'
+        ) {
+            abort(403, 'Tài khoản giảng viên của bạn chưa được Admin phê duyệt.');
         }
 
         return $next($request);
